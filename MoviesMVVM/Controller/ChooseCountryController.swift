@@ -72,7 +72,7 @@ class ChooseCountryController: UIViewController {
         
         if let swRevealVC = SWRevealViewController(rearViewController: rearViewController, frontViewController: frontController) {
             swRevealVC.toggleAnimationType = SWRevealToggleAnimationType.easeOut;
-            swRevealVC.toggleAnimationDuration = 0.30;
+            swRevealVC.toggleAnimationDuration = 1;
             swRevealVC.delegate = self
             let nav_controller = UINavigationController(rootViewController: swRevealVC)
             nav_controller.navigationBar.isHidden = true
@@ -81,7 +81,7 @@ class ChooseCountryController: UIViewController {
             UIWindow.key?.rootViewController = nav_controller
             UIWindow.key?.makeKeyAndVisible()
             if let window = UIWindow.key {
-                UIView.transition(with: window, duration: 0.3, options: UIView.AnimationOptions.transitionCrossDissolve, animations: {}, completion:
+                UIView.transition(with: window, duration: 1.0, options: UIView.AnimationOptions.transitionCrossDissolve, animations: {}, completion:
                                     { completed in
                 })
             }
@@ -89,7 +89,7 @@ class ChooseCountryController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        LangTableview.layer.cornerRadius = 15
+        LangTableview.layer.cornerRadius = 30
         LangTableview.layer.masksToBounds = true
         LangTableview.layer.borderWidth = 0.6
         LangTableview.layer.borderColor = UIColor.white.cgColor
@@ -178,15 +178,17 @@ extension ChooseCountryController {
     }
     
     func setupJSON(){
-        let data = MaintainLanguge.shared.language.data(using: .utf8)!
+        // Convert a String instance to a DaTa instance in Swift -> this method you can use.
+        let data = MaintainLanguge.shared.language.data(using: .utf8)
         do {
+            guard let data = data else { return }
             if let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [String: [String:String]] {
                 jsonArray.forEach { repo in
                     let value = repo.value
                     let lang = LanguageCode(selectBool: false, code: repo.key , languageName: LanguageModel(name: value["name"] ?? "", nativeName: value["nativeName"] ?? ""))
                     orignalList?.append(lang)
                 }
-                
+                // Using update the orignalList when compare with MaintainLanguage
                 MaintainLanguge.shared.languageList?.forEach({ lang in
                     let index = orignalList?.first(where: { code in
                         code.code == lang.code
