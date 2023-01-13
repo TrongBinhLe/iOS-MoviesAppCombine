@@ -119,6 +119,7 @@ extension ChooseCountryController: UITableViewDelegate {
         var updatedSelectedItem = selectedItem
         updatedSelectedItem.selectBool.toggle()
         TTGSnackbar(message: selectedItem.languageName.name + (updatedSelectedItem.selectBool ? " add to favourite" : " remoeved from your favourite"), duration: .short).show()
+        //Update status selectedBoolToggele when user selectRowAt indexPath
         if let fillterIndex = fillteredList?.firstIndex(of: selectedItem) {
             fillteredList?[fillterIndex] = updatedSelectedItem
         }
